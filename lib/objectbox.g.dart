@@ -52,6 +52,41 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(3, 6767630845649796334),
+      name: 'School',
+      lastPropertyId: const IdUid(2, 4108497277324327119),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 4248717157710886076),
+            name: 'id',
+            type: 6,
+            flags: 1)
+      ],
+      relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(4, 5938559820341108902),
+      name: 'Student',
+      lastPropertyId: const IdUid(4, 543649517424813676),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 1965285683576370959),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(4, 543649517424813676),
+            name: 'schoolId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(3, 5298672047960768757),
+            relationTarget: 'School')
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -75,17 +110,20 @@ Future<Store> openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(2, 2974556178212939465),
-      lastIndexId: const IdUid(1, 8770448925397643574),
+      lastEntityId: const IdUid(4, 5938559820341108902),
+      lastIndexId: const IdUid(3, 5298672047960768757),
       lastRelationId: const IdUid(0, 0),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [7500343996566844411],
-      retiredIndexUids: const [8770448925397643574],
+      retiredIndexUids: const [8770448925397643574, 1798775736047885759],
       retiredPropertyUids: const [
         8679145622944608738,
         6791197980422716479,
         3512720168156430008,
-        4901371138183582085
+        4901371138183582085,
+        5760137928526746290,
+        4108497277324327119,
+        6408333106817054340
       ],
       retiredRelationUids: const [],
       modelVersion: 5,
@@ -132,6 +170,55 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 8, false));
 
           return object;
+        }),
+    School: EntityDefinition<School>(
+        model: _entities[1],
+        toOneRelations: (School object) => [],
+        toManyRelations: (School object) => {},
+        getId: (School object) => object.id,
+        setId: (School object, int id) {
+          object.id = id;
+        },
+        objectToFB: (School object, fb.Builder fbb) {
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = School(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+
+          return object;
+        }),
+    Student: EntityDefinition<Student>(
+        model: _entities[2],
+        toOneRelations: (Student object) => [object.school],
+        toManyRelations: (Student object) => {},
+        getId: (Student object) => object.id,
+        setId: (Student object, int id) {
+          object.id = id;
+        },
+        objectToFB: (Student object, fb.Builder fbb) {
+          fbb.startTable(5);
+          fbb.addInt64(0, object.id);
+          fbb.addInt64(3, object.school.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = Student(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+          object.school.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          object.school.attach(store);
+          return object;
         })
   };
 
@@ -155,4 +242,20 @@ class Task_ {
 
   /// see [Task.subText2]
   static final subText2 = QueryStringProperty<Task>(_entities[0].properties[4]);
+}
+
+/// [School] entity fields to define ObjectBox queries.
+class School_ {
+  /// see [School.id]
+  static final id = QueryIntegerProperty<School>(_entities[1].properties[0]);
+}
+
+/// [Student] entity fields to define ObjectBox queries.
+class Student_ {
+  /// see [Student.id]
+  static final id = QueryIntegerProperty<Student>(_entities[2].properties[0]);
+
+  /// see [Student.school]
+  static final school =
+      QueryRelationToOne<Student, School>(_entities[2].properties[1]);
 }

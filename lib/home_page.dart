@@ -266,6 +266,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     print("Task =$a");
                   },
                   child: const Text("Multiple query \nfor Between ")),
+              ElevatedButton(
+                  onPressed: () {
+                    final school = School();
+                    final student = Student();
+                    student.school.target = school;
+                    int studentId = ObjectBox.store.box<Student>().put(student);
+                    print("object=======$studentId");
+                  },
+                  child: const Text("one to one")),
             ],
           ),
         ),

@@ -24,6 +24,30 @@ class Task {
   }
 }
 
+@Entity()
+class School {
+  @Id()
+  int id = 0;
+  //String? name;
+  School(
+    this.id,
+  );
+}
+
+@Entity()
+class Student {
+  @Id()
+  int id = 0;
+  //String? name;
+  final school = ToOne<School>();
+  Student(
+    this.id,
+  );
+}
+
+
+
+
 // class Owner {
 //   @Id()
 //   int id = 0;
