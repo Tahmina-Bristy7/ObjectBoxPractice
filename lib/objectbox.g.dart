@@ -190,7 +190,7 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
 
           final object = School(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
 
           return object;
         }),
@@ -214,7 +214,7 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
 
           final object = Student(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
           object.school.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
           object.school.attach(store);

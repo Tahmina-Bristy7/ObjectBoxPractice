@@ -266,15 +266,33 @@ class _MyHomePageState extends State<MyHomePage> {
                     print("Task =$a");
                   },
                   child: const Text("Multiple query \nfor Between ")),
+              Center(child: const Text("******RELATIONAL DATABASE********")),
               ElevatedButton(
                   onPressed: () {
-                    final school = School();
-                    final student = Student();
+                    final school = School(id: 1);
+                    final student = Student(id: 2);
                     student.school.target = school;
+
                     int studentId = ObjectBox.store.box<Student>().put(student);
-                    print("object=======$studentId");
+                    final getStudentIdfromSchool =
+                        ObjectBox.store.box<School>().get(studentId);
+                    School? getStudentINSchool = getStudentIdfromSchool;
+                    print(
+                        "After getting StudentId IN School Database=======${getStudentINSchool!.id}");
+
+                    final getStudent = student.school.target;
+                    // print(
+                    //     "After getting target IN School Database=======${getStudent}");
                   },
-                  child: const Text("one to one")),
+                  child:
+                      const Text(" To add one to one \n Relation & get data")),
+              ElevatedButton(
+                  onPressed: () {
+                    School school = School();
+                    Student student = Student();
+                    student.school.target = null;
+                  },
+                  child: const Text("Remove Relation")),
             ],
           ),
         ),

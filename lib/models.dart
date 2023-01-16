@@ -27,22 +27,18 @@ class Task {
 @Entity()
 class School {
   @Id()
-  int id = 0;
+  int id;
   //String? name;
-  School(
-    this.id,
-  );
+  School({this.id = 0});
 }
 
 @Entity()
 class Student {
   @Id()
-  int id = 0;
+  int id;
   //String? name;
   final school = ToOne<School>();
-  Student(
-    this.id,
-  );
+  Student({this.id = 0});
 }
 
 
