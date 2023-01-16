@@ -269,8 +269,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Center(child: const Text("******RELATIONAL DATABASE********")),
               ElevatedButton(
                   onPressed: () {
-                    final school = School(id: 1);
-                    final student = Student(id: 2);
+                    School school = School();
+                    Student student = Student();
                     student.school.target = school;
 
                     int studentId = ObjectBox.store.box<Student>().put(student);
