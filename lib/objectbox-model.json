@@ -75,7 +75,7 @@
     },
     {
       "id": "5:4784641137743094440",
-      "lastPropertyId": "1:1963563480851811440",
+      "lastPropertyId": "2:4391937889232370965",
       "name": "Customer",
       "properties": [
         {
@@ -83,13 +83,18 @@
           "name": "id",
           "type": 6,
           "flags": 1
+        },
+        {
+          "id": "2:4391937889232370965",
+          "name": "name",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "7:3507524268256657123",
-      "lastPropertyId": "2:4891977013916942631",
+      "lastPropertyId": "3:8585686339793362225",
       "name": "Orders",
       "properties": [
         {
@@ -105,6 +110,11 @@
           "flags": 520,
           "indexId": "5:343120373219312782",
           "relationTarget": "Customer"
+        },
+        {
+          "id": "3:8585686339793362225",
+          "name": "name",
+          "type": 9
         }
       ],
       "relations": []

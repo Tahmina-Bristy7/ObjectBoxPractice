@@ -289,34 +289,65 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                   onPressed: () {
                     Orders orders = Orders();
-                    Customer customer = Customer();
+                    Customer customer1 = Customer(name: 'Tahmina');
+                    Customer customer2 = Customer(name: 'Bristy');
                     late Box<Orders> orderBox = ObjectBox.store.box<Orders>();
                     late Box<Customer> customerBox =
                         ObjectBox.store.box<Customer>();
 
-                    customer.orders.add(Orders());
-                    customer.orders.add(Orders());
-                    customer.orders.add(Orders());
+                    customer1.orders.add(Orders());
+                    customer2.orders.add(Orders(name: "Onion"));
+                    customer2.orders.add(Orders(name: "Garlic"));
 
-                    final putCustomerId = customerBox.put(customer);
-                    for (int i = 0; i <= orderBox.count(); i++) {
-                      Orders? getCustomerId = orderBox.get(putCustomerId);
-                      print(
-                          "Get Customer Id from Orders Database : ${getCustomerId!.id}");
-                    }
+                    final putCustomerId =
+                        customerBox.putMany([customer1, customer2]);
+                    final a = customerBox
+                        .query(Customer_.name.equals('Bristy'))
+                        .build()
+                        .find();
+                    final b = a.forEach(
+                      (element) {
+                        var c = element.id;
+                        final d = customerBox
+                            .query(Customer_.id.equals(c))
+                            .build()
+                            .find();
+                        print("===========================$d++++++++++++++");
+                        // d.forEach((element) {
+                        //   element.
+                        // });
+                      },
+                    );
+                    print("customerBox Count which have Bristy name =======$a");
 
-                    Orders? getCustomerId =
-                        ObjectBox.store.box<Orders>().get(putCustomerId);
+                    print("customerBox Count =======${customerBox.count()}");
 
-                    print(
-                        "Get Customer Id from Orders Database : ${getCustomerId!.id}");
-                    Customer? getOrderId =
-                        ObjectBox.store.box<Customer>().get(getCustomerId.id);
+                    print(putCustomerId);
 
-                    print(
-                        "asdcvbnm,sdfghjkjhgfds=${ObjectBox.store.box<Orders>().count()}");
-                    print(
-                        "Get Order Id from Customer database : ${getOrderId!.id}");
+                    // List<Orders> getCustomerId = orders.
+                    //     .query(Orders_.id.equals(putCustomerId))
+                    //     .build()
+                    //     .find();
+                    // List<Customer?> customerList = [];
+                    // customerList.add(customerBox.get(putCustomerId));
+
+                    // final customer1 = customerBox
+                    //     .query(Customer_.id.equals(putCustomerId))
+                    //     .build()
+                    //     .find();
+                    // print("object2====================$customerList");
+                    // print(
+                    //     "Get Customer Id from Orders Database : ${customer1}");
+
+                    // print(
+                    //     "Get Customer Id from Orders Database : ${getCustomerId}");
+                    // Customer? getOrderId =
+                    //     ObjectBox.store.box<Customer>().get(getCustomerId.id);
+
+                    // print(
+                    //     "asdcvbnm,sdfghjkjhgfds=${ObjectBox.store.box<Orders>().count()}");
+                    // print(
+                    //     "Get Order Id from Customer database : ${getOrderId!.id}");
 
                     // print("After getting target IN School Database=======${getStudent}");
                   },

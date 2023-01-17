@@ -45,17 +45,17 @@ class Student {
 class Customer {
   @Id()
   int id;
-  //String? name;
+  String? name;
   @Backlink('customer')
   final orders = ToMany<Orders>();
-  Customer({this.id = 0});
+  Customer({this.id = 0, this.name});
 }
 
 @Entity()
 class Orders {
   @Id()
   int id;
-  //String? name;
+  String? name;
   final customer = ToOne<Customer>();
-  Orders({this.id = 0});
+  Orders({this.id = 0, this.name});
 }

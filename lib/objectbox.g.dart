@@ -91,14 +91,19 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(5, 4784641137743094440),
       name: 'Customer',
-      lastPropertyId: const IdUid(1, 1963563480851811440),
+      lastPropertyId: const IdUid(2, 4391937889232370965),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
             id: const IdUid(1, 1963563480851811440),
             name: 'id',
             type: 6,
-            flags: 1)
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 4391937889232370965),
+            name: 'name',
+            type: 9,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[
@@ -107,7 +112,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(7, 3507524268256657123),
       name: 'Orders',
-      lastPropertyId: const IdUid(2, 4891977013916942631),
+      lastPropertyId: const IdUid(3, 8585686339793362225),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -121,7 +126,12 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(5, 343120373219312782),
-            relationTarget: 'Customer')
+            relationTarget: 'Customer'),
+        ModelProperty(
+            id: const IdUid(3, 8585686339793362225),
+            name: 'name',
+            type: 9,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
@@ -272,8 +282,11 @@ ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (Customer object, fb.Builder fbb) {
-          fbb.startTable(2);
+          final nameOffset =
+              object.name == null ? null : fbb.writeString(object.name!);
+          fbb.startTable(3);
           fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -282,7 +295,9 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
 
           final object = Customer(
-              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              name: const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 6));
           InternalToManyAccess.setRelInfo(
               object.orders,
               store,
@@ -300,9 +315,12 @@ ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (Orders object, fb.Builder fbb) {
-          fbb.startTable(3);
+          final nameOffset =
+              object.name == null ? null : fbb.writeString(object.name!);
+          fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addInt64(1, object.customer.targetId);
+          fbb.addOffset(2, nameOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -311,7 +329,9 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
 
           final object = Orders(
-              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0));
+              id: const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              name: const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8));
           object.customer.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0);
           object.customer.attach(store);
@@ -361,6 +381,9 @@ class Student_ {
 class Customer_ {
   /// see [Customer.id]
   static final id = QueryIntegerProperty<Customer>(_entities[3].properties[0]);
+
+  /// see [Customer.name]
+  static final name = QueryStringProperty<Customer>(_entities[3].properties[1]);
 }
 
 /// [Orders] entity fields to define ObjectBox queries.
@@ -371,4 +394,7 @@ class Orders_ {
   /// see [Orders.customer]
   static final customer =
       QueryRelationToOne<Orders, Customer>(_entities[4].properties[1]);
+
+  /// see [Orders.name]
+  static final name = QueryStringProperty<Orders>(_entities[4].properties[2]);
 }
