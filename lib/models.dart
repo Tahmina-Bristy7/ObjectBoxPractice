@@ -41,14 +41,21 @@ class Student {
   Student({this.id = 0});
 }
 
+@Entity()
+class Customer {
+  @Id()
+  int id;
+  //String? name;
+  @Backlink('customer')
+  final orders = ToMany<Orders>();
+  Customer({this.id = 0});
+}
 
-
-
-// class Owner {
-//   @Id()
-//   int id = 0;
-
-//   String name;
-
-//   Owner(this.name, {this.id = 0});
-// }
+@Entity()
+class Orders {
+  @Id()
+  int id;
+  //String? name;
+  final customer = ToOne<Customer>();
+  Orders({this.id = 0});
+}

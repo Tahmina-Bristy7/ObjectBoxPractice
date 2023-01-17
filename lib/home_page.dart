@@ -288,6 +288,42 @@ class _MyHomePageState extends State<MyHomePage> {
                       const Text(" To add one to one \n Relation & get data")),
               ElevatedButton(
                   onPressed: () {
+                    Orders orders = Orders();
+                    Customer customer = Customer();
+                    late Box<Orders> orderBox = ObjectBox.store.box<Orders>();
+                    late Box<Customer> customerBox =
+                        ObjectBox.store.box<Customer>();
+
+                    customer.orders.add(Orders());
+                    customer.orders.add(Orders());
+                    customer.orders.add(Orders());
+
+                    final putCustomerId = customerBox.put(customer);
+                    for (int i = 0; i <= orderBox.count(); i++) {
+                      Orders? getCustomerId = orderBox.get(putCustomerId);
+                      print(
+                          "Get Customer Id from Orders Database : ${getCustomerId!.id}");
+                    }
+
+                    Orders? getCustomerId =
+                        ObjectBox.store.box<Orders>().get(putCustomerId);
+
+                    print(
+                        "Get Customer Id from Orders Database : ${getCustomerId!.id}");
+                    Customer? getOrderId =
+                        ObjectBox.store.box<Customer>().get(getCustomerId.id);
+
+                    print(
+                        "asdcvbnm,sdfghjkjhgfds=${ObjectBox.store.box<Orders>().count()}");
+                    print(
+                        "Get Order Id from Customer database : ${getOrderId!.id}");
+
+                    // print("After getting target IN School Database=======${getStudent}");
+                  },
+                  child:
+                      const Text(" To add one to many \n Relation & get data")),
+              ElevatedButton(
+                  onPressed: () {
                     School school = School();
                     Student student = Student();
                     student.school.target = null;
