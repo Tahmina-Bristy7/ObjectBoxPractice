@@ -291,38 +291,55 @@ class _MyHomePageState extends State<MyHomePage> {
                     Orders orders = Orders();
                     Customer customer1 = Customer(name: 'Tahmina');
                     Customer customer2 = Customer(name: 'Bristy');
+                    Customer customer3 = Customer(name: 'Arju');
                     late Box<Orders> orderBox = ObjectBox.store.box<Orders>();
                     late Box<Customer> customerBox =
                         ObjectBox.store.box<Customer>();
-
                     customer1.orders.add(Orders());
-                    customer2.orders.add(Orders(name: "Onion"));
-                    customer2.orders.add(Orders(name: "Garlic"));
+                    //customer2.orders.add(Orders(name: "Onion"));
+                    customer1.orders.add(Orders(name: "Garlic"));
+                    int a = customerBox.count();
+                    print(
+                        "CustomerBox count =============================${a}");
 
-                    final putCustomerId =
-                        customerBox.putMany([customer1, customer2]);
-                    final a = customerBox
-                        .query(Customer_.name.equals('Bristy'))
-                        .build()
-                        .find();
-                    final b = a.forEach(
-                      (element) {
-                        var c = element.id;
-                        final d = customerBox
-                            .query(Customer_.id.equals(c))
-                            .build()
-                            .find();
-                        print("===========================$d++++++++++++++");
-                        // d.forEach((element) {
-                        //   element.
-                        // });
-                      },
-                    );
-                    print("customerBox Count which have Bristy name =======$a");
+                    final putCustomerId = customerBox.put(customer1);
+                    QueryBuilder<Orders> builder = orderBox.query(
+                        Orders_.name.equals("Garlic") & Orders_.id.equals(33));
+                    builder.link(
+                        Orders_.customer, Customer_.id.equals(putCustomerId));
+                    builder.build().find().forEach((element) {
+                      print(
+                          "Bristy=======================${element.name} ${element.id} ${element.customer.target?.name} ");
+                    });
+                    print("Bristy=======================}");
 
-                    print("customerBox Count =======${customerBox.count()}");
+                    // final a = customerBox
+                    //     .query(Customer_.name.equals('Bristy'))
+                    //     .build()
+                    //     .find() as Box<Customer>;
 
-                    print(putCustomerId);
+                    //print("*****************$a");
+                    // final b = a.forEach(
+                    //   (element) {
+                    //     var c = element.orders.forEach((element) {
+                    //       print(
+                    //           "object======================================================${element.name}");
+                    //     });
+                    // final d = customerBox
+                    //     .query(Customer_.id.equals(c))
+                    //     .build()
+                    //     .find();
+                    //print("===========================$d++++++++++++++");
+                    // d.forEach((element) {
+                    //   element.
+                    //     // });
+                    //   },
+                    // );
+                    // print("customerBox Count which have Bristy name =======");
+
+                    // print("customerBox Count =======${customerBox.count()}");
+
+                    // print(putCustomerId);
 
                     // List<Orders> getCustomerId = orders.
                     //     .query(Orders_.id.equals(putCustomerId))
